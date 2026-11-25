@@ -1,0 +1,10 @@
+NAME                     READY   STATUS      RESTARTS      AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+emi-web-55b476d5-27dzn   1/1     Running     0             4m38s   10.244.0.19   minikube   <none>           <none>
+emi-web-55b476d5-727z6   1/1     Running     2 (16h ago)   16h     10.244.0.8    minikube   <none>           <none>
+emi-web-55b476d5-jlwc4   1/1     Running     2 (16h ago)   16h     10.244.0.11   minikube   <none>           <none>
+emi-web-55b476d5-jqhn8   1/1     Running     0             4m38s   10.244.0.18   minikube   <none>           <none>
+emi-web-55b476d5-r8r89   1/1     Running     2 (16h ago)   16h     10.244.0.9    minikube   <none>           <none>
+mongo-0                  1/1     Running     0             16h     10.244.0.10   minikube   <none>           <none>
+mongo-1                  1/1     Running     0             133m    10.244.0.14   minikube   <none>           <none>
+mongo-2                  1/1     Running     0             16h     10.244.0.13   minikube   <none>           <none>
+mongo-init-d9s69         0/1     Completed   0             16h     10.244.0.7    minikube   <none>           <none>
