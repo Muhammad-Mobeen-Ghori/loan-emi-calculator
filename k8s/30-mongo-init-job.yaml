@@ -1,0 +1,157 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: mongo-init
+  namespace: emi
+
+spec:
+
+  backoffLimit: 10
+
+  template:
+
+    metadata:
+      labels:
+        app: mongo-init
+
+    spec:
+
+      restartPolicy: OnFailure
+
+      containers:
+
+        - name: mongo-init
+
+          image: mongo:7
+
+          imagePullPolicy: IfNotPresent
+
+          command:
+            - /bin/bash
+            - -c
+
+          args:
+            - |
+
+              set -eu
+
+              echo "Waiting for all MongoDB members..."
+
+              for host in mongo-0.mongo mongo-1.mongo mongo-2.mongo
+              do
+
+                echo "Checking $host"
+
+                ready=0
+
+                for attempt in $(seq 1 60)
+                do
+
+                  if mongosh --host "$host:27017" --quiet \
+                    --eval 'db.adminCommand({ping:1}).ok' \
+                    >/dev/null 2>&1
+                  then
+                    ready=1
+                    break
+                  fi
+
+                  sleep 3
+
+                done
+
+                if [ "$ready" -ne 1 ]; then
+                  echo "MongoDB member $host is not reachable"
+                  exit 1
+                fi
+
+              done
+
+              echo "All MongoDB members are reachable."
+
+              echo "Initializing replica set..."
+
+              mongosh --host mongo-0.mongo:27017 --quiet --eval '
+
+                try {
+
+                  rs.status();
+
+                  print("Replica set is already initialized.");
+
+                } catch (error) {
+
+                  print("Starting replica set initialization.");
+
+                  rs.initiate({
+
+                    _id: "rs0",
+
+                    members: [
+
+                      {
+                        _id: 0,
+                        host: "mongo-0.mongo:27017"
+                      },
+
+                      {
+                        _id: 1,
+                        host: "mongo-1.mongo:27017"
+                      },
+
+                      {
+                        _id: 2,
+                        host: "mongo-2.mongo:27017"
+                      }
+
+                    ]
+
+                  });
+
+                }
+
+              '
+
+              echo "Waiting for PRIMARY and SECONDARY members..."
+
+              for attempt in $(seq 1 60)
+              do
+
+                state=$(mongosh --host mongo-0.mongo:27017 \
+                  --quiet --eval '
+
+                  const s = rs.status();
+
+                  const primary = s.members.filter(
+                    m => m.stateStr === "PRIMARY"
+                  ).length;
+
+                  const secondary = s.members.filter(
+                    m => m.stateStr === "SECONDARY"
+                  ).length;
+
+                  print(
+                    primary === 1 &&
+                    secondary === 2 &&
+                    s.members.length === 3
+                    ? "READY"
+                    : "WAITING"
+                  );
+
+                  ' 2>/dev/null || true)
+
+                if [ "$state" = "READY" ]; then
+
+                  echo "Replica set successfully initialized."
+
+                  exit 0
+
+                fi
+
+                sleep 3
+
+              done
+
+              echo "Replica set did not reach the expected state."
+
+              exit 1

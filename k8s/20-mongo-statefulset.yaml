@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: mongo
+  namespace: emi
+
+spec:
+
+  serviceName: mongo
+
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: mongo
+
+  template:
+
+    metadata:
+      labels:
+        app: mongo
+
+    spec:
+
+      terminationGracePeriodSeconds: 30
+
+      containers:
+
+        - name: mongodb
+
+          image: mongo:7
+
+          imagePullPolicy: IfNotPresent
+
+          args:
+            - "--replSet"
+            - "rs0"
+            - "--bind_ip_all"
+
+          ports:
+            - name: mongodb
+              containerPort: 27017
+              protocol: TCP
+
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+
+          readinessProbe:
+            exec:
+              command:
+                - mongosh
+                - --quiet
+                - --eval
+                - "db.adminCommand('ping').ok"
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 6
+
+  volumeClaimTemplates:
+
+    - metadata:
+        name: mongo-data
+
+      spec:
+
+        accessModes:
+          - ReadWriteOnce
+
+        storageClassName: standard
+
+        resources:
+          requests:
+            storage: 1Gi
