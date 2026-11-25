@@ -1,0 +1,2 @@
+replicas,request_rate,duration_seconds,scheduled_requests,completed_requests,successful_requests,failed_requests,average_response_time_ms,actual_test_duration_seconds
+2,10,60,600,600,600,0,24.996,59.926

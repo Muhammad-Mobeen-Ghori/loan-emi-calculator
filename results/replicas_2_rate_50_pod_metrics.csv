@@ -1,0 +1,9 @@
+timestamp,pod_name,cpu_millicores,cpu_utilization_percent,memory,run_label
+2026-11-25T11:42:00.820455+00:00,emi-web-55b476d5-5kkct,4.0,4.0,40Mi,replicas_2_rate_50
+2026-11-25T11:42:00.820455+00:00,emi-web-55b476d5-xsttw,6.0,6.0,40Mi,replicas_2_rate_50
+2026-11-25T11:42:16.436037+00:00,emi-web-55b476d5-5kkct,94.0,94.0,42Mi,replicas_2_rate_50
+2026-11-25T11:42:16.436037+00:00,emi-web-55b476d5-xsttw,91.0,91.0,42Mi,replicas_2_rate_50
+2026-11-25T11:42:31.649910+00:00,emi-web-55b476d5-5kkct,94.0,94.0,42Mi,replicas_2_rate_50
+2026-11-25T11:42:31.649910+00:00,emi-web-55b476d5-xsttw,91.0,91.0,42Mi,replicas_2_rate_50
+2026-11-25T11:42:47.025380+00:00,emi-web-55b476d5-5kkct,94.0,94.0,42Mi,replicas_2_rate_50
+2026-11-25T11:42:47.025380+00:00,emi-web-55b476d5-xsttw,91.0,91.0,42Mi,replicas_2_rate_50

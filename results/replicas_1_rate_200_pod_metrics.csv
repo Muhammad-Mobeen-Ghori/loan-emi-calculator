@@ -1,0 +1,5 @@
+timestamp,pod_name,cpu_millicores,cpu_utilization_percent,memory,run_label
+2026-11-25T11:35:15.551472+00:00,emi-web-55b476d5-xsttw,181.0,181.0,44Mi,replicas_1_rate_200
+2026-11-25T11:35:30.948898+00:00,emi-web-55b476d5-xsttw,181.0,181.0,44Mi,replicas_1_rate_200
+2026-11-25T11:35:46.332527+00:00,emi-web-55b476d5-xsttw,181.0,181.0,44Mi,replicas_1_rate_200
+2026-11-25T11:36:01.488792+00:00,emi-web-55b476d5-xsttw,181.0,181.0,44Mi,replicas_1_rate_200
